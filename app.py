@@ -6,11 +6,9 @@ app = Flask(__name__)
 
 DB = "analytics.db"
 
-
 def init_db():
     conn = sqlite3.connect(DB)
     c = conn.cursor()
-
     c.execute("""
         CREATE TABLE IF NOT EXISTS visits (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -19,10 +17,8 @@ def init_db():
             time TEXT
         )
     """)
-
     conn.commit()
     conn.close()
-
 
 def log_visit(ip):
     conn = sqlite3.connect(DB)
@@ -38,36 +34,42 @@ def log_visit(ip):
     conn.commit()
     conn.close()
 
-
 def get_stats():
     conn = sqlite3.connect(DB)
     c = conn.cursor()
 
-    # total visits
     c.execute("SELECT COUNT(*) FROM visits")
     total = c.fetchone()[0]
 
-    # daily active users (unique IPs today)
     today = datetime.now().strftime("%Y-%m-%d")
     c.execute("SELECT COUNT(DISTINCT ip) FROM visits WHERE date = ?", (today,))
     dau = c.fetchone()[0]
 
     conn.close()
-
     return total, dau
 
 
 @app.route("/")
 def home():
     init_db()
-
     ip = request.remote_addr
     log_visit(ip)
 
+    # ❌ NOT sent to HTML anymore
+    return render_template("index.html")
+
+
+# 🔐 PRIVATE ADMIN ONLY (you)
+@app.route("/admin")
+def admin():
     total, dau = get_stats()
 
-    return render_template("index.html", total=total, dau=dau)
-
+    return f"""
+    <h2>Private Analytics Dashboard</h2>
+    <p>Total visits: {total}</p>
+    <p>Daily Active Users: {dau}</p>
+    """
+    
 
 if __name__ == "__main__":
     app.run(debug=True)
