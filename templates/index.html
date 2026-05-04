@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>For Vienna ❤️</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial;
+            background: linear-gradient(to right, #ffccd5, #ffe6f0);
+            margin-top: 100px;
+        }
+
+        h1 {
+            font-size: 40px;
+        }
+
+        button {
+            padding: 15px 25px;
+            font-size: 18px;
+            background: #ff4d88;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        #message {
+            margin-top: 30px;
+            font-size: 24px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Hi Vienna ❤️</h1>
+    <p>I made something just for you...</p>
+
+    <button onclick="showMessage()">Click me 💌</button>
+
+    <div id="message">
+        You make my world brighter every single day 💖
+    </div>
+
+    <script>
+        function showMessage() {
+            document.getElementById("message").style.display = "block";
+        }
+    </script>
+
+</body>
+</html>
