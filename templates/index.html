@@ -12,28 +12,23 @@
             margin: 0;
             font-family: Arial, sans-serif;
 
-            /* 🌄 Background image */
-            background: url("/static/veeiomosh.jpeg") center/cover no-repeat;
-
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
 
             position: relative;
+            transition: background 1s ease-in-out;
+            background-size: cover;
+            background-position: center;
         }
 
-        /* 🌑 Dark overlay for readability */
+        /* dark overlay */
         body::before {
             content: "";
             position: absolute;
-            top: 0;
-            left: 0;
-
-            width: 100%;
-            height: 100%;
-
-            background: rgba(0, 0, 0, 0.45);
+            inset: 0;
+            background: rgba(0,0,0,0.45);
             z-index: 0;
         }
 
@@ -49,18 +44,15 @@
             border-radius: 18px;
 
             text-align: center;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
         }
 
         h1 {
-            font-size: 22px;
             margin-bottom: 10px;
         }
 
         p {
             color: #444;
             font-size: 15px;
-            line-height: 1.4;
         }
 
         button {
@@ -78,8 +70,17 @@
             cursor: pointer;
         }
 
-        button:active {
-            transform: scale(0.98);
+        .screen {
+            display: none;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.6s ease;
+        }
+
+        .active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
         }
 
         audio {
@@ -87,18 +88,13 @@
             margin-top: 10px;
         }
 
-        .screen {
-            display: none;
-        }
-
-        .active {
-            display: block;
-            animation: fadeIn 0.6s ease-in-out;
-        }
-
-        @keyframes fadeIn {
-            from {opacity: 0; transform: translateY(10px);}
-            to {opacity: 1; transform: translateY(0);}
+        /* 📊 analytics box */
+        .stats {
+            margin-top: 15px;
+            font-size: 13px;
+            color: #666;
+            padding-top: 10px;
+            border-top: 1px solid #ddd;
         }
     </style>
 </head>
@@ -110,26 +106,22 @@
     <!-- 🎬 SCREEN 1 -->
     <div id="s1" class="screen active">
         <h1>Hi Vienna 💖</h1>
-        <p>I didn’t plan this… but here we are.</p>
-        <p>Some stories begin quietly.</p>
+        <p>This is our little story...</p>
         <button onclick="next(2)">Start ▶️</button>
     </div>
 
     <!-- 🎬 SCREEN 2 -->
     <div id="s2" class="screen">
-        <h1>A Feeling 💌</h1>
-        <p>I don’t know how to explain it right,</p>
-        <p>but you became my calm in the noise of life.</p>
+        <h1>Feeling 💌</h1>
+        <p>You became my calm in chaos.</p>
         <button onclick="next(3)">Continue ➡️</button>
     </div>
 
     <!-- 🎬 SCREEN 3 -->
     <div id="s3" class="screen">
         <h1>Memory 💭</h1>
-        <p>Every small thing you do stays in my mind,</p>
-        <p>like something I never want to forget.</p>
+        <p>Some moments stay forever.</p>
 
-        <!-- 🎵 MUSIC -->
         <audio id="music" controls>
             <source src="/static/veeomosh.mp3" type="audio/mpeg">
         </audio>
@@ -139,28 +131,46 @@
 
     <!-- 🎬 SCREEN 4 -->
     <div id="s4" class="screen">
-        <h1>Final Truth ❤️</h1>
-        <p>I don’t need a perfect story,</p>
-        <p>I just need you in mine.</p>
-
+        <h1>Final ❤️</h1>
+        <p>I just need you in my story.</p>
         <button onclick="next(1)">Replay 🔁</button>
+
+        <!-- 📊 ANALYTICS DISPLAY -->
+        <div class="stats">
+            Total visits: {{ total }} 💖<br>
+            Today’s active users: {{ dau }} 🔥
+        </div>
     </div>
 
 </div>
 
 <script>
+    const backgrounds = {
+        1: "url('/static/screen1.jpg')",
+        2: "url('/static/screen2.jpg')",
+        3: "url('/static/screen3.jpg')",
+        4: "url('/static/screen4.jpg')"
+    };
+
+    let musicStarted = false;
+    document.body.style.background = backgrounds[1];
+
     function next(n) {
         for (let i = 1; i <= 4; i++) {
             document.getElementById("s" + i).classList.remove("active");
         }
+
         document.getElementById("s" + n).classList.add("active");
+
+        document.body.style.background = backgrounds[n];
     }
 
     function playMusic() {
-        const music = document.getElementById("music");
-        music.play().catch(() => {
-            console.log("User interaction required");
-        });
+        if (!musicStarted) {
+            const music = document.getElementById("music");
+            music.play().catch(() => {});
+            musicStarted = true;
+        }
     }
 </script>
 
