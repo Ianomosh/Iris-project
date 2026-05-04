@@ -1,52 +1,168 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>For Vienna ❤️</title>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Our Story 💖</title>
+
     <style>
         body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+
+            /* 🌄 Background image */
+            background: url("/static/veeiomosh.jpeg") center/cover no-repeat;
+
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            position: relative;
+        }
+
+        /* 🌑 Dark overlay for readability */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 100%;
+
+            background: rgba(0, 0, 0, 0.45);
+            z-index: 0;
+        }
+
+        .card {
+            position: relative;
+            z-index: 1;
+
+            background: rgba(255,255,255,0.95);
+            width: 90%;
+            max-width: 360px;
+
+            padding: 25px;
+            border-radius: 18px;
+
             text-align: center;
-            font-family: Arial;
-            background: linear-gradient(to right, #ffccd5, #ffe6f0);
-            margin-top: 100px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
         }
 
         h1 {
-            font-size: 40px;
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #444;
+            font-size: 15px;
+            line-height: 1.4;
         }
 
         button {
-            padding: 15px 25px;
-            font-size: 18px;
-            background: #ff4d88;
-            color: white;
+            margin-top: 15px;
+            width: 100%;
+
+            padding: 12px;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
+
+            background: #ff4d6d;
+            color: white;
+            font-size: 16px;
+
             cursor: pointer;
         }
 
-        #message {
-            margin-top: 30px;
-            font-size: 24px;
+        button:active {
+            transform: scale(0.98);
+        }
+
+        audio {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .screen {
             display: none;
+        }
+
+        .active {
+            display: block;
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {opacity: 0; transform: translateY(10px);}
+            to {opacity: 1; transform: translateY(0);}
         }
     </style>
 </head>
+
 <body>
 
-    <h1>Hi Vienna ❤️</h1>
-    <p>I made something just for you...</p>
+<div class="card">
 
-    <button onclick="showMessage()">Click me 💌</button>
-
-    <div id="message">
-        You make my world brighter every single day 💖
+    <!-- 🎬 SCREEN 1 -->
+    <div id="s1" class="screen active">
+        <h1>Hi Vienna 💖</h1>
+        <p>I didn’t plan this… but here we are.</p>
+        <p>Some stories begin quietly.</p>
+        <button onclick="next(2)">Start ▶️</button>
     </div>
 
-    <script>
-        function showMessage() {
-            document.getElementById("message").style.display = "block";
+    <!-- 🎬 SCREEN 2 -->
+    <div id="s2" class="screen">
+        <h1>A Feeling 💌</h1>
+        <p>I don’t know how to explain it right,</p>
+        <p>but you became my calm in the noise of life.</p>
+        <button onclick="next(3)">Continue ➡️</button>
+    </div>
+
+    <!-- 🎬 SCREEN 3 -->
+    <div id="s3" class="screen">
+        <h1>Memory 💭</h1>
+        <p>Every small thing you do stays in my mind,</p>
+        <p>like something I never want to forget.</p>
+
+        <!-- 🎵 MUSIC -->
+        <audio id="music" controls>
+            <source src="/static/veeomosh.mp3" type="audio/mpeg">
+        </audio>
+
+        <button onclick="playMusic(); next(4)">Next ➡️</button>
+    </div>
+
+    <!-- 🎬 SCREEN 4 -->
+    <div id="s4" class="screen">
+        <h1>Final Truth ❤️</h1>
+        <p>I don’t need a perfect story,</p>
+        <p>I just need you in mine.</p>
+
+        <button onclick="next(1)">Replay 🔁</button>
+    </div>
+
+</div>
+
+<script>
+    function next(n) {
+        for (let i = 1; i <= 4; i++) {
+            document.getElementById("s" + i).classList.remove("active");
         }
-    </script>
+        document.getElementById("s" + n).classList.add("active");
+    }
+
+    function playMusic() {
+        const music = document.getElementById("music");
+        music.play().catch(() => {
+            console.log("User interaction required");
+        });
+    }
+</script>
 
 </body>
 </html>
